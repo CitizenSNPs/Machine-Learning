@@ -36,11 +36,11 @@ sns.boxplot(train_data['Survived'],train_data['Fare'])
 plt.show() #passengers with higher fares more likely to survive
 
 sns.countplot(train_data['Pclass'], hue=train_data['Survived'])
-# plt.show()
-# print(train_data['Ticket'])
-#
-# sns.boxplot(train_data['Pclass'], train_data['Age'], hue=train_data['Survived'])
-# plt.show()
+plt.show()
+print(train_data['Ticket'])
+
+sns.boxplot(train_data['Pclass'], train_data['Age'], hue=train_data['Survived'])
+plt.show()
 cleaned_data = train_data.drop(['Cabin','PassengerId','Name','Ticket'], axis=1)
 
 cleaned_data['Sex']=pd.get_dummies(cleaned_data['Sex'])
