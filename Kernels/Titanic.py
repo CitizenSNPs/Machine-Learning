@@ -9,6 +9,7 @@ from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 
 sns.set_style('whitegrid')
+sns.set_palette('Pastel1')
 
 train_data = pd.read_csv('C:\\Users\\dkirksey\\Downloads\\Titanic\\train.csv')
 test_data = pd.read_csv('C:\\Users\\dkirksey\\Downloads\\Titanic\\test.csv')
