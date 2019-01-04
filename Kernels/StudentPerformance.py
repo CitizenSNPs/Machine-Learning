@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 data = pd.read_csv('C:\\Users\\dkirksey\\Downloads\\StudentsPerformance.csv')
 sns.set_style('darkgrid')
+sns.set_palette('Pastel1')
 
 print(data.head(5))
 print (data.describe())
@@ -24,7 +25,9 @@ i=1
 for subject in scores:
 	sns.boxplot(x=data['gender'], y=data[subject], ax=plt.subplot(int('13'+str(i))))
 	i+=1
+	plt.axhline(data[subject].mean(),ls='--',color='grey')
 	plt.suptitle('Student Scores by Gender')
+
 plt.show()
 
 def find_all_passes(row):
@@ -42,6 +45,7 @@ i=1
 for subject in scores:
 	sns.boxplot(x=data['race/ethnicity'], order=['group A', 'group B', 'group C', 'group D', 'group E'],y=data[subject], ax=plt.subplot(int('13'+str(i))))
 	i+=1
+	plt.axhline(data[subject].mean(), ls='--', color='grey')
 plt.suptitle('Scores by Race/Ethnicity')
 plt.show()
 i=1
@@ -50,6 +54,7 @@ for subject in scores:
 	plot=sns.boxplot(x=data['parental level of education'], y=data[subject], ax=plt.subplot(int('13'+str(i))))
 	plt.xticks(rotation=45)
 	i+=1
+	plt.axhline(data[subject].mean(), ls='--', color='grey')
 plt.suptitle('Scores by Parental Level of Education',fontsize=16)
 plt.show()
 
@@ -57,6 +62,7 @@ i=1
 for subject in scores:
 	sns.boxplot(x=data['lunch'], y=data[subject], ax=plt.subplot(int('13'+str(i))))
 	i+=1
+	plt.axhline(data[subject].mean(), ls='--', color='grey')
 plt.suptitle('Scores by Lunch Type', fontsize=16)
 plt.show()
 
@@ -85,5 +91,6 @@ i=1
 for subject in scores:
 	sns.boxplot(x=data['test preparation course'], y=data[subject], ax=plt.subplot(int('13'+str(i))))
 	i+=1
+	plt.axhline(data[subject].mean(), ls='--', color='grey')
 plt.suptitle('Student Scores by Test Prep Completion', fontsize=16)
 plt.show()
