@@ -8,8 +8,8 @@ import math
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 
-sns.set_style('whitegrid')
-sns.set_palette('Pastel1')
+sns.set_style('darkgrid')
+sns.set_palette('Set2')
 
 train_data = pd.read_csv('C:\\Users\\dkirksey\\Downloads\\Titanic\\train.csv')
 test_data = pd.read_csv('C:\\Users\\dkirksey\\Downloads\\Titanic\\test.csv')
@@ -18,6 +18,7 @@ print(train_data.head(5))
 print(train_data.describe())
 print(train_data.info())
 
+train_data = train_data[train_data['Fare']<500]
 sns.heatmap(train_data.drop('Survived',axis=1).corr())
 plt.show()
 
@@ -25,8 +26,8 @@ fig = plt.figure(figsize=(10,10))
 ax=plt.axes()
 
 #age vs survival
-sns.distplot(train_data[train_data['Survived']==1]['Age'].dropna(),ax=ax,color='blue')
-sns.distplot(train_data[train_data['Survived']==0]['Age'].dropna(),ax=ax,color='orange')
+sns.distplot(train_data[train_data['Survived']==1]['Age'].dropna(),ax=ax)
+sns.distplot(train_data[train_data['Survived']==0]['Age'].dropna(),ax=ax)
 plt.suptitle('Distribution of Passengers by Age', fontsize=16)
 plt.legend(['Survived','Did not Survive'])
 plt.show()
@@ -54,9 +55,11 @@ sns.countplot(train_data['Pclass'], hue=train_data['Survived'])
 plt.suptitle('Passenger Survival by Passenger Class', fontsize=16)
 plt.show()
 
-
 sns.boxplot(train_data['Pclass'], train_data['Age'], hue=train_data['Survived'])
 plt.suptitle('Passenger Age vs Pclass', fontsize=16)
+plt.show()
+
+sns.jointplot(x=train_data['Age'], y=train_data['Fare'])
 plt.show()
 
 cleaned_data = train_data.drop(['Cabin','PassengerId','Name','Ticket'], axis=1)
@@ -72,7 +75,8 @@ def impute_age(row):
 cleaned_data['Age']=cleaned_data.apply(lambda row : impute_age(row),axis=1)
 cleaned_data = cleaned_data.dropna()
 
-X = cleaned_data.drop('Survived', axis=1)
+# X = cleaned_data.drop('Survived', axis=1)
+X = cleaned_data[['Sex', 'Pclass', 'SibSp', 'Parch','Embarked']]
 y= cleaned_data['Survived']
 
 logreg=LogisticRegression()
@@ -82,7 +86,10 @@ y_pred = logreg.predict(X_test)
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
 print(logreg.intercept_)
-print (pd.DataFrame(logreg.coef_, index=['Coefficients'], columns=X.columns))
+coef = pd.DataFrame(logreg.coef_, index=['Coefficients'], columns=X.columns)
+print(coef.values)
+print(coef.columns)
+#pclass, sex, sibsp, embarked
 
 svc = SVC()
 svc.fit(X_train, y_train)
