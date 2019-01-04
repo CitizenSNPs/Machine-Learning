@@ -18,8 +18,9 @@ print(train_data.head(5))
 print(train_data.describe())
 print(train_data.info())
 
-train_data = train_data[train_data['Fare']<500]
+train_data = train_data[train_data['Fare']<500] #addressing outlier
 sns.heatmap(train_data.drop('Survived',axis=1).corr())
+plt.title('Titanic Dataset Features', fontsize=16)
 plt.show()
 
 fig = plt.figure(figsize=(10,10))
@@ -40,7 +41,7 @@ plt.show()
 
 sns.countplot(train_data['Embarked'], hue=train_data['Survived'])
 plt.suptitle('Passenger Survivals by Embark Location', fontsize=16)
-plt.show() #passenger chance of survival: c>Q>S
+plt.show() #passenger chance of survival: C>Q>S
 
 train_data['FamilySize'] = train_data['SibSp'] + train_data['Parch'] +1
 sns.countplot(train_data['FamilySize'], hue=train_data['Survived'])
@@ -60,6 +61,7 @@ plt.suptitle('Passenger Age vs Pclass', fontsize=16)
 plt.show()
 
 sns.jointplot(x=train_data['Age'], y=train_data['Fare'])
+plt.title('Passenger Age vs. Fare')
 plt.show()
 
 cleaned_data = train_data.drop(['Cabin','PassengerId','Name','Ticket'], axis=1)
@@ -76,7 +78,7 @@ cleaned_data['Age']=cleaned_data.apply(lambda row : impute_age(row),axis=1)
 cleaned_data = cleaned_data.dropna()
 
 # X = cleaned_data.drop('Survived', axis=1)
-X = cleaned_data[['Sex', 'Pclass', 'SibSp', 'Parch','Embarked']]
+X = cleaned_data[['Sex', 'Pclass', 'SibSp', 'Parch','Embarked']] #these features carry the largest weight
 y= cleaned_data['Survived']
 
 logreg=LogisticRegression()
@@ -89,7 +91,6 @@ print(logreg.intercept_)
 coef = pd.DataFrame(logreg.coef_, index=['Coefficients'], columns=X.columns)
 print(coef.values)
 print(coef.columns)
-#pclass, sex, sibsp, embarked
 
 svc = SVC()
 svc.fit(X_train, y_train)
@@ -105,7 +106,7 @@ grid.fit(X_train, y_train)
 best_params = grid.best_params_
 print(best_params) #C:1000, gamma:.0001
 
-svc2 = SVC(C=1000, gamma=.0001)
+svc2 = SVC(C=100, gamma=.01)
 svc2.fit(X_train, y_train)
 y_pred = svc2.predict(X_test)
 
